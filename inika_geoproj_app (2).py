@@ -21,8 +21,7 @@ df.bmi = pd.to_numeric(df.bmi, 'coerce')
 df['disease'].mask(df['disease'] == "obese","obesity", inplace=True)
 
 df_disease = df[(df.disease != "nd") & (df.disease != "n")  & (df.gender != "nd") &(df.gender != "-") & (df.gender != " -")]
-df_country = df['country'].value_counts().rename_axis('country') .reset_index(name='Number of People')
-df_age = df[(df.gender != "nd") &(df.gender != "-") & (df.gender != " -") (df.gender != "na")]
+df_age = df[(df.gender != "nd") &(df.gender != "-") & (df.gender != " -") & (df.gender != "na")]
 
 fig1 = px.histogram(df_disease, x="disease",color = "gender",barmode="group", color_discrete_map={"male": "blue", "female": "pink"},)
 fig1 = fig1.update_layout(
