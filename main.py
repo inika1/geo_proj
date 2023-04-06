@@ -117,7 +117,7 @@ def plot_scatter(value):
             else: 
                 df2 = df_bmi[(df_bmi.disease == value)]
     
-    fig = px.scatter(df2.dropna(),x="age",y="bmi",color="gender", color_discrete_map={"male": "blue", "female": "red"}, labels={"age":"Age", "bmi":"BMI"})
+    fig = px.scatter(df2.dropna(),x="age",y="bmi",color="gender", color_discrete_map={"male": "blue", "female": "red"}, labels={"age":"Age", "bmi":"BMI"}, trendline = 'ols')
     fig = fig.update_layout(
        plot_bgcolor= '#FFFFFF',
        paper_bgcolor='#FFFFFF'
