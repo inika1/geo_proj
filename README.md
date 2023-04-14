@@ -2,7 +2,7 @@
 Creating a data visualisation dashboard of a [kaggle dataset](https://www.kaggle.com/datasets/antaresnyc/human-metagenomics?resource=download) - named demo_data1.csv in this repository  
 
 
-### plots made
+### plots made:
 Dropdown box option where you can update the data by specifying the disease using @app.callback
 
 1. age histogram 
