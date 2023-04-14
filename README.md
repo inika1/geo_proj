@@ -28,13 +28,13 @@ Web app that creates interactive plots (scatter, histogram, and map) of a csv fi
 
     Takes in two numerical data columns(variable 1 & 2), both dropdowns will only show numerical values.
     
-    If the group by dropdown is selected and has only two unique values(eg male and female):
-    an unpaired t test will be calculated and the results will be shown (using statsmodels)
+    If the group by dropdown is selected and has only two unique values(eg male and female),
+    an unpaired t test will be calculated and the results will be shown (using statsmodels).
 
 ### group by dropdown:
 
     The histogram and scatter plot values can be grouped and colored differently depending on the data column 
-    selected in the groupby dropdown - if nothing is selected the values will not be grouped
+    selected in the groupby dropdown - if nothing is selected the values will not be grouped.
 
     To use the group by dropdown for the map, you must also select a value in the select map condition dropdown.
     The map will only show locations for the subjects that have that value as well
@@ -42,19 +42,19 @@ Web app that creates interactive plots (scatter, histogram, and map) of a csv fi
 
 ### map:
 
-    If the data column has country locations, they must be either country names or ISO-3 country codes
+    If the data column has country locations, they must be either country names or ISO-3 country codes.
 
-    If the data column has USA state locations, they must be the state names or the two letter abbreviations of the names
+    If the data column has USA state locations, they must be the state names or the two letter abbreviations of the names.
  
 
 ### time slider:
 
-    If the csv file contains a column for time(years only), the values will be shown on the time slider
+    If the csv file contains a column for time(years only), the values will be shown on the time slider.
     
-    When a year is selected data only from that year will be shown
+    When a year is selected data only from that year will be shown.
 
 
-There are two demo datasets(named demo_data1 and demo_data2 in this repository) 
+There are two demo datasets(named demo_data1 and demo_data2 in this repository).
 
 
 
