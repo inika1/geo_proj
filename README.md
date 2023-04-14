@@ -19,7 +19,7 @@ web app that creates interactive plots (scatter, histogram, and map) of a csv fi
 
 **refresh website after uploading a CSV file / selecting a demo dataset**
 
-**file must be less than 10mb, and contain columns with numerical(eg age or bmi) and geographical data (countries or USA states) to use all the plotting functions**
+**file must be less than 10mb, and contain columns with numerical(eg age or bmi), time(years) and geographical data (countries or USA states) to use all the plotting functions**
 
 ### histogram:
     takes in one data coloumn(variable 1) - columns will not show up in the dropdown if there is only one unique value 
@@ -27,6 +27,8 @@ web app that creates interactive plots (scatter, histogram, and map) of a csv fi
 ### scatter plot:
 
     takes in two numerical data columns(variable 1 & 2), both dropdowns will only show numerical values
+    
+    if the groupby dropdown is selected, and has only two unique values(eg male and female), an unpaired t test will be calculated and the results will be shown (using statsmodels)
 
 ### group by dropdown:
 
@@ -39,6 +41,13 @@ web app that creates interactive plots (scatter, histogram, and map) of a csv fi
     if the data column has country locations, they must be either country names or ISO-3 country codes
 
     if the data column has USA state locations, they must be the state names or the two letter abbreviations of the names
+ 
+
+### time slider:
+
+    if the csv file contains a column for time(years only), the values will be shown on the time slider
+    
+    when a year is selected data only from that year will be shown
 
 
 there are two demo datasets(named demo_data1 and demo_data2 in this repository) 
