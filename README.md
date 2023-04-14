@@ -51,7 +51,7 @@ Web app that creates interactive plots (scatter, histogram, and map) of a csv fi
 
     If the csv file contains a column for time(years only), the values will be shown on the time slider
     
-    wWen a year is selected data only from that year will be shown
+    When a year is selected data only from that year will be shown
 
 
 There are two demo datasets(named demo_data1 and demo_data2 in this repository) 
