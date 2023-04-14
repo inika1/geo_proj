@@ -15,7 +15,7 @@ Dropdown box option where you can update the data by specifying the disease usin
 
 # [data visualizer:](https://inika2.pythonanywhere.com/) 
 
-Web app that creates interactive plots (scatter, histogram, and map) of a csv file.
+Web app that creates interactive plots (scatter, histogram, and map) of any csv file.
 
 **Refresh website after uploading a CSV file / selecting a demo dataset.**
 
