@@ -13,7 +13,7 @@ dropdown box option where you can update the data by specifying the disease usin
 
 4. map displaying the geographical distribution of data subjects
 
-#[data visualizer:](https://inika2.pythonanywhere.com/) 
+# [data visualizer:](https://inika2.pythonanywhere.com/) 
 
 web app that creates interactive plots (scatter, histogram, and map) of a csv file
 
@@ -22,18 +22,23 @@ Refresh website after uploading a CSV file / selecting a demo dataset
 file must be less than 10mb, and contain columns with numerical(eg age or bmi) and geographical data (countries or USA states) to use all the plotting functions
 
 scatter plot:
+
 takes in two numerical values, both dropdown will only show numerical values
 
 group by dropdown:
-the histogram and scatter plot values can be grouped and colored differently depending on the value in the groupby dropdown, if nothing is selected the values will not be grouped
+t
+he histogram and scatter plot values can be grouped and colored differently depending on the value in the groupby dropdown, if nothing is selected the values will not be grouped
 
 to use the group by dropdown for the map, you must also select a value in the select map condition dropdown, and the map will only show locations for the subjects that have that value as well. you can select multiple values in the select map condition dropdown.
 
 map:
+
 if the data column has country locations, they must be either country names or ISO-3 country codes
 if the data column has USA state locations, they must be the state names or the two letter abbreviations of the names
 
 there are two demo datasets(named demo_data1 and demo_data2 in this repository) 
+
+link to webapp:https://inika2.pythonanywhere.com/ 
 
 
 
