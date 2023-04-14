@@ -23,11 +23,11 @@ file must be less than 10mb, and contain columns with numerical(eg age or bmi) a
 
 scatter plot:
 
-takes in two numerical values, both dropdown will only show numerical values
+takes in two numerical values, both dropdowns(value 1 & 2) will only show numerical values
 
 group by dropdown:
-t
-he histogram and scatter plot values can be grouped and colored differently depending on the value in the groupby dropdown, if nothing is selected the values will not be grouped
+
+the histogram and scatter plot values can be grouped and colored differently depending on the value in the groupby dropdown, if nothing is selected the values will not be grouped
 
 to use the group by dropdown for the map, you must also select a value in the select map condition dropdown, and the map will only show locations for the subjects that have that value as well. you can select multiple values in the select map condition dropdown.
 
@@ -38,7 +38,7 @@ if the data column has USA state locations, they must be the state names or the 
 
 there are two demo datasets(named demo_data1 and demo_data2 in this repository) 
 
-link to webapp:https://inika2.pythonanywhere.com/ 
+link to webapp: https://inika2.pythonanywhere.com/ 
 
 
 
