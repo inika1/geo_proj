@@ -17,9 +17,9 @@ dropdown box option where you can update the data by specifying the disease usin
 
 web app that creates interactive plots (scatter, histogram, and map) of a csv file
 
-**refresh website after uploading a CSV file / selecting a demo dataset
+**refresh website after uploading a CSV file / selecting a demo dataset**
 
-**file must be less than 10mb, and contain columns with numerical(eg age or bmi) and geographical data (countries or USA states) to use all the plotting functions
+**file must be less than 10mb, and contain columns with numerical(eg age or bmi) and geographical data (countries or USA states) to use all the plotting functions**
 
 ### scatter plot:
 
@@ -38,7 +38,7 @@ if the data column has USA state locations, they must be the state names or the 
 
 there are two demo datasets(named demo_data1 and demo_data2 in this repository) 
 
-**link to webapp: https://inika2.pythonanywhere.com/ 
+**link to webapp: https://inika2.pythonanywhere.com/**
 
 
 
