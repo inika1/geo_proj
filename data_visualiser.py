@@ -361,53 +361,58 @@ def update_options(value,value2):
         return [], None
 
 
+
 @app.callback(
     Output("groupby", "options"),
     Output("groupby", "value"),
-    [Input("dropdown", "value"), Input("dropdown2","value"),Input("graphDropdown","value") ])
+    [Input("dropdown", "value"), Input("dropdown2","value"),Input("graphDropdown","value"), Input("dropdown","options") ])
 
-def update_options(value,value2,graph):
+def update_options(value,value2,graph,drop_options):
     global df
     options = []
     
-    df1 = df.dropna(subset = [value], inplace = False)
-    
-    if graph == 'scatter':
-        if value2 is not None:
-            df1 = df1.dropna(subset = [value2], inplace = False)
+
+
+    if drop_options != []:
+        df1 = df.dropna(subset = [value], inplace = False)
+        if graph == 'scatter':
+            if value2 is not None:
+                df1 = df1.dropna(subset = [value2], inplace = False)
+
+                for i in df1.columns.tolist():
+                    df_temp = df1.dropna(subset = [i], inplace = False)
+                    if len(df_temp[i].unique()) > 1 and len(df_temp[i].unique()) < 7:
+                        if i != value2 and i !=value:
+                            options.append({'label': i, 'value': i})
+        else:
 
             for i in df1.columns.tolist():
                 df_temp = df1.dropna(subset = [i], inplace = False)
                 if len(df_temp[i].unique()) > 1 and len(df_temp[i].unique()) < 7:
-                    if i != value2 and i !=value:
+                    if i !=value:
                         options.append({'label': i, 'value': i})
-    else:
-        
-        for i in df1.columns.tolist():
-            df_temp = df1.dropna(subset = [i], inplace = False)
-            if len(df_temp[i].unique()) > 1 and len(df_temp[i].unique()) < 7:
-                if i !=value:
-                    options.append({'label': i, 'value': i})
     
     
     return options,None
- 
-       
         
 @app.callback(
     Output("map_options", "options"),Output("map_options", "value"),
-    [Input("graphDropdown","value"),Input("groupby", "value")])
-
-def update_options(graph,value):
+    [Input("graphDropdown","value"),Input("groupby", "value"), Input("dropdown","options")])
+def update_options(graph,value, map_options):
     global df
     if graph == 'map':
-        options = []
-        df_map = df.dropna(subset = [value], inplace = False)
-        for i in df_map[value].unique():
-                options.append({'label': i, 'value': i})
-        return options, None
+        if map_options !=[]:
+            options = []
+            df_map = df.dropna(subset = [value], inplace = False)
+            for i in df_map[value].unique():
+                    options.append({'label': i, 'value': i})
+            return options, None
+        else:
+            return [], None
     else:
         return [], None
+
+        
 
 
 @app.callback(
