@@ -33,11 +33,12 @@ Web app that creates interactive plots (scatter, histogram, and map) of a csv fi
 
 ### group by dropdown:
 
-    The histogram and scatter plot values can be grouped and colored differently depending on the data column selected in the groupby dropdown
-    if nothing is selected the values will not be grouped
+    The histogram and scatter plot values can be grouped and colored differently depending on the data column 
+    selected in the groupby dropdown - if nothing is selected the values will not be grouped
 
     To use the group by dropdown for the map, you must also select a value in the select map condition dropdown.
-    The map will only show locations for the subjects that have that value as well- you can select multiple values in the select map condition dropdown.
+    The map will only show locations for the subjects that have that value as well
+    - you can select multiple values in the select map condition dropdown.
 
 ### map:
 
