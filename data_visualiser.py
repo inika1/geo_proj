@@ -475,9 +475,9 @@ def plot(value,value3,value2,grp,m_option):
         df_geo = temp[value].value_counts().rename_axis(value).reset_index(name='Count')
 
         if '_statecodes' in value:
-            fig = px.choropleth(df_geo,locations = value,color = 'Count',locationmode = "USA-states",scope="usa")
+            fig = px.choropleth(df_geo,locations = value,color = 'Count',locationmode = "USA-states",scope="usa",color_continuous_scale="Viridis")
         else:
-            fig = px.choropleth(df_geo,locations = value,color = 'Count',locationmode = 'country names')
+            fig = px.choropleth(df_geo,locations = value,color = 'Count',locationmode = 'country names',color_continuous_scale="Viridis")
 
     return fig
 
