@@ -14,6 +14,8 @@ import io
 import dash_table
 from pycountry import countries
 import pandas as pd
+from statsmodels.stats.weightstats import ttest_ind
+
 
 us_states= {
     "Alabama": "AL",
@@ -90,9 +92,17 @@ def clean_df(temp):
     count_state = 0
     count_country = 0
     
+    found_year = False
+    
+    
+    
     for i in df.columns.tolist():
         state_codes = []
         country_codes = []
+        
+        count_year = 0
+        
+        
         var = 0
         for y in df[i]:
             if isinstance(y, str):
@@ -114,6 +124,11 @@ def clean_df(temp):
                         count_country = count_country+1
                     except:
                         var = 0
+                
+            else: 
+                
+                if y<2100.0 and y>1990.0:
+                    count_year = count_year+1
 
 
         
@@ -145,9 +160,19 @@ def clean_df(temp):
                     var = 0
                 country_codes.append(y)
             df[i + '_countrycodes'] = country_codes
+            
+        
+        if count_year > (len(df[i])/3):
+            if found_year == False:
+                years = df[i]
+                df[i + '_yearoptions'] = years
+                found_year = True
 
         count_state = 0
         count_country = 0
+    
+    
+    
     
     return df
 
@@ -159,7 +184,6 @@ df_data1 = df
 
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.MINTY])
-
 
 plottypes = ['histogram','scatter','map']
 def parse_contents(contents, filename):
@@ -182,7 +206,6 @@ def parse_contents(contents, filename):
         return html.Div([
             'There was an error processing this file.'
         ])
-
 
 app.layout = html.Div([
     html.Div([html.H3(children = "Data visualisation of CSV files", className = "text-center text-light",style={
@@ -237,7 +260,7 @@ app.layout = html.Div([
             'borderRadius': '5px',
             'textAlign': 'center',
             'margin': '10px'
-        }),dbc.Tooltip("Refresh page after upload! File should be less than 10mb, contain numerical data (eg age or bmi) and contain locations(countries or USA states) to use all the plotting functions", 
+        }),dbc.Tooltip("Refresh page after upload! File should be less than 10mb, contain numerical data (eg age or bmi), contain time (years), and contain locations(countries or USA states) to use all the plotting functions", 
             target="upload-data",placement="top",style={'color': 'white',
                        'font-size': '10pt',
                        'font-family': 'sans-serif',
@@ -261,11 +284,16 @@ app.layout = html.Div([
     
     dbc.Col(html.Div([html.Hr(),html.H6(children = 'Group by:'),html.Br(),dcc.Dropdown(id = 'groupby', options=[],value=None,clearable=True),html.Br(),
                         html.H6(children = 'Select condition for map:'),html.Br(),
-                        dcc.Dropdown(id = "map_options",options=[],value=None,clearable=True, multi = True)], className = "bg-light"),width=3) ], className = "bg-light",style={'margin': '10px'}),
+                        dcc.Dropdown(id = "map_options",options=[],value=None,clearable=True, multi = True),html.Br(),html.H6(children = 'Select year:'),html.Br(),dcc.Slider(None, None, None,value=None,id='time_slider'),
+    ], className = "bg-light"),width=3) ], className = "bg-light",style={'margin': '10px'}),
     
+    
+    dbc.Row([dbc.Col(
+    html.Div(id='scatter_results'),width={"size": 3, "offset": 1})]),
     
     html.Div(id = 'placeholder'),
 ])
+
 
 @app.callback(
     Output('placeholder', "children"),
@@ -296,13 +324,14 @@ def update_options(content,value,name):
 def update_options(value):
     global df
     if value == 'histogram':
-        options = [{'label': i, 'value': i} for i in df.columns.tolist() if ('_statecodes' not in i) and ('_countrycodes' not in i) and (len(df[i].unique())>1) and (len(df[i].value_counts().unique()) > 1)]
+        options = [{'label': i, 'value': i} for i in df.columns.tolist() if ('_statecodes' not in i) and ('_countrycodes' not in i) and ('_yearoptions' not in i) and (len(df[i].unique())>1) and (len(df[i].value_counts().unique()) > 1)]
         
     elif value == 'scatter':
         options = []
         for i in df.columns.tolist():
              if df[i].dtype == 'float64' or df[i].dtype == 'int64':
-                    options.append({'label': i, 'value': i})
+                    if '_yearoptions' not in i:
+                        options.append({'label': i, 'value': i})
         if len(options)<2:
             options = []
 
@@ -341,10 +370,13 @@ def update_options(options2):
     
     else:
         return 'dataset1'
+ 
+       
 
 @app.callback(
     Output("dropdown2", "options"),
     Output("dropdown2", "value"),
+    Output("time_slider","value"),
     [Input("graphDropdown","value"),Input("dropdown", "value")])
 def update_options(value,value2):
     global df
@@ -356,17 +388,15 @@ def update_options(value,value2):
                         options.append({'label': i, 'value': i})
         if len(options)<2:
             options = []
-        return options, None
+        return options, None, None
     else:
-        return [], None
-
+        return [], None, None
 
 
 @app.callback(
     Output("groupby", "options"),
     Output("groupby", "value"),
     [Input("dropdown", "value"), Input("dropdown2","value"),Input("graphDropdown","value"), Input("dropdown","options") ])
-
 def update_options(value,value2,graph,drop_options):
     global df
     options = []
@@ -393,8 +423,9 @@ def update_options(value,value2,graph,drop_options):
                         options.append({'label': i, 'value': i})
     
     
-    return options,None
+    return options,None        
         
+           
 @app.callback(
     Output("map_options", "options"),Output("map_options", "value"),
     [Input("graphDropdown","value"),Input("groupby", "value"), Input("dropdown","options")])
@@ -412,25 +443,48 @@ def update_options(graph,value, map_options):
     else:
         return [], None
 
-        
+
+           
+@app.callback(
+    Output("time_slider", "min"),Output("time_slider", "max"), Output("time_slider","marks"),
+    [Input("graphDropdown","value")])
+def update_options(value):
+    global df
+    var = 0
+    for i in df.columns.tolist():
+        if "_yearoptions" not in i:
+            var = 0
+        else:
+            marks={i: '{}'.format(i) for i in range(min(df[i]),max(df[i]),1)}
+            return min(df[i]), max(df[i]) , marks
 
 
 @app.callback(
-    Output("graph1", "figure"), 
-    [Input("dropdown", "value"), Input("dropdown2", "value"), Input("graphDropdown","value"), Input("groupby","value"), Input("map_options","value")])
+    Output("graph1", "figure"), Output("scatter_results","children"), 
+    [Input("dropdown", "value"), Input("dropdown2", "value"), Input("graphDropdown","value"), Input("groupby","value"), Input("map_options","value"), Input("time_slider","value")])
 
 
-def plot(value,value3,value2,grp,m_option):
+def plot(value,value3,value2,grp,m_option,time):
     global df
+    df_temp = df
+    children = []
+    for i in df.columns.tolist():
+        if "_yearoptions" not in i:
+            var = 0
+        else:
+            if time is not None:
+                df_temp = df[df[i] == time]
+    
+    
     if value2 == 'histogram':
-        df_histo = df.dropna(subset = [value], inplace = False)
+        df_histo = df_temp.dropna(subset = [value], inplace = False)
         grouptype = "group"
 
         if grp is not None:
             df_histo = df_histo.dropna(subset = [grp])
 
             if df[value].dtype == 'float64' or df[value].dtype == 'int64':
-                if len(df[grp].unique()) > 3:
+                if len(df_temp[grp].unique()) > 3:
                     grouptype = "overlay"
                 else:
                     
@@ -448,34 +502,60 @@ def plot(value,value3,value2,grp,m_option):
         fig = fig.update_xaxes(showline=True, linewidth=1, linecolor='black',gridcolor='#d3d3d3')
         fig = fig.update_yaxes(showline=True, linewidth=1, linecolor='black',gridcolor='#d3d3d3')
         
-
+        
 
     elif value2 == 'scatter':
 
         
         if grp is not None:
-            df_scatter = df.dropna(subset = [grp])
+            df_scatter = df_temp.dropna(subset = [grp])
+            df_scatter = df_scatter.dropna(subset = [value3])
             fig = px.scatter(df_scatter, x=value, y=value3, trendline='ols', color=grp)
+            
+            if len(df_scatter[grp].unique()) == 2:
+                x1 = df_scatter[df_scatter[grp] == df_scatter[grp].unique()[0]]
+                x2 = df_scatter[df_scatter[grp] == df_scatter[grp].unique()[1]]
+                
+                list = ttest_ind(x1[value3],x2[value3])
+                
+                courses = [list]
+                columns = ['test statistic','p value','degree of freedom']
+                results = pd.DataFrame(courses,columns=columns)
+                          
+                children = dash_table.DataTable(results.to_dict('records'), [{"name": i, "id": i} for i in results.columns],  style_header={'text-align': 'center'
+            })
+                
+                
+            
         else:
-            fig = px.scatter(df, x=value, y=value3, trendline='ols')
+            fig = px.scatter(df_temp, x=value, y=value3, trendline='ols')
 
+        
         fig = fig.update_layout(
             plot_bgcolor= '#FFFFFF',
             paper_bgcolor='#FFFFFF'
          )
         fig = fig.update_xaxes(showline=True, linewidth=1, linecolor='black',gridcolor='#d3d3d3')
         fig = fig.update_yaxes(showline=True, linewidth=1, linecolor='black',gridcolor='#d3d3d3')
+        
+         
+        
+        
+        
+    
+        
+        
 
        
 
 
     else:
-        temp = df
+        temp = df_temp
         if m_option is not None:
 
             if m_option != []:
 
-                  temp = df[df[grp].isin(m_option)]
+                  temp = df_temp[df_temp[grp].isin(m_option)]
 
         df_geo = temp[value].value_counts().rename_axis(value).reset_index(name='Count')
 
@@ -484,7 +564,16 @@ def plot(value,value3,value2,grp,m_option):
         else:
             fig = px.choropleth(df_geo,locations = value,color = 'Count',locationmode = 'country names',color_continuous_scale="mint")
 
-    return fig
+    return fig,children
+
+
+
+    
+
+
+
+#if __name__ == "__main__":
+    #app.run_server(debug=True,use_reloader=False,port=8049)
 
 
 
@@ -497,5 +586,4 @@ def plot(value,value3,value2,grp,m_option):
 
 
 
-#if __name__ == "__main__":
-    #app.run_server(debug=True,use_reloader=False,port=8049)
+
