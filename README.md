@@ -28,7 +28,7 @@ Web app that creates interactive plots (scatter, histogram, and map) of a csv fi
 
     Takes in two numerical data columns(variable 1 & 2), both dropdowns will only show numerical values.
     
-    If the groupby dropdown is selected and has only two unique values(eg male and female):
+    If the group by dropdown is selected and has only two unique values(eg male and female):
     an unpaired t test will be calculated and the results will be shown (using statsmodels)
 
 ### group by dropdown:
