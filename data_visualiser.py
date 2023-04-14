@@ -151,9 +151,9 @@ def clean_df(temp):
     
     return df
 
-df = clean_df(pd.read_csv('Downloads/demo_data1.csv', dtype = str))
+df = clean_df(pd.read_csv('demo_data1.csv', dtype = str))
 
-df_data2 = clean_df(pd.read_csv('Downloads/demo_data2.csv', dtype = str))
+df_data2 = clean_df(pd.read_csv('demo_data2.csv', dtype = str))
 
 df_data1 = df
 
