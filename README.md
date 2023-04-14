@@ -43,8 +43,6 @@ web app that creates interactive plots (scatter, histogram, and map) of a csv fi
 
 there are two demo datasets(named demo_data1 and demo_data2 in this repository) 
 
-**link to webapp: https://inika2.pythonanywhere.com/**
-
 
 
 # libraries required
